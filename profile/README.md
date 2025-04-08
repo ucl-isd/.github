@@ -1,4 +1,4 @@
-# University College London Information Services Department (UCL ISD)
+# University College London - Information Services Department
 
 ## Access
 For UCL ISD Staff, please request access via MyServices.
