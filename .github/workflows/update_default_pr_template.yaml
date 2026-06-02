@@ -1,0 +1,28 @@
+---
+name: update-default-pr-template
+on:
+  pull_request:
+    paths:
+      - '.github/PULL_REQUEST_TEMPLATE/**'
+jobs:
+  updater:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: update_template
+        run: |
+          THE_FILE=.github/pull_request_template.md
+          echo -e "Please go to the \`Preview\` tab and select the appropriate sub-template:\n" > $THE_FILE
+          file_list=$(cd .github/PULL_REQUEST_TEMPLATE/; ls -1 *.md)
+          for i in ${file_list}
+          do
+            echo "Processing template: $i"
+            TEMPLATE_i="${i%%.*}"
+            echo "* [${TEMPLATE_i}](?expand=1&template=${i})" >> $THE_FILE
+          done
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: './.github/'
+          push_options: --force
